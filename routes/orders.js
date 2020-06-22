@@ -11,8 +11,15 @@ router.get('/', (req, res) => {
 
 // order 정보 등록하기
 router.post('/', (req, res) => {
+
+    const order = {
+        number : req.body.orderNumber,
+        date : req.body.orderDate
+    }
+
     res.json({
-        message : 'order post'
+        message : 'order post',
+        orderInfo : order
     });
 });
 
