@@ -3,18 +3,16 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
-// app.use((req,res) => {
-//     res.json({
-//         message: 'It works!'
-//     });
-// });
+const bodyParser = require("body-parser");
+
 
 const productRoute = require("./routes/products");
 const orderRoute = require("./routes/orders");
 
 // middle ware 설정
 app.use(morgan('dev'));
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // router

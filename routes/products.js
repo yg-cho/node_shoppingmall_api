@@ -12,8 +12,16 @@ router.get('/', (req, res) => {
 
 // product 정보 등록하기
 router.post('/', (req, res) => {
+
+    const product = {
+        name : req.body.productName,
+        price : req.body.productPrice
+    }
+
+
     res.json({
-        message: 'product post'
+        message: 'product post',
+        productInfo: product
     });
 });
 
