@@ -16,6 +16,7 @@ const orderRoute = require("./routes/orders");
 // router
 app.use("/product", productRoute);
 app.use("/order", orderRoute);
+// app.use("/", (req, res))
 
 
 const PORT = 5000;
