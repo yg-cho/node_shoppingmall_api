@@ -160,16 +160,5 @@ router.delete('/:productId', (req, res) => {
 });
 
 
-
-//product 전체 삭제
-router.delete("/",(req, res) => {
-    productModel
-        .delete()
-        .then()
-        .catch();
-});
-
-
-
 // 2
 module.exports = router;

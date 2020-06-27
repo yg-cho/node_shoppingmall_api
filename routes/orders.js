@@ -157,14 +157,5 @@ router.delete('/:orderId',(req,res) => {
         })
 });
 
-//order 전체 삭제하기
-
-router.delete("/",(req,res) => {
-    orderModel
-        .delete()
-        .then()
-        .catch();
-});
-
 //2
 module.exports = router;
