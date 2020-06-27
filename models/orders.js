@@ -5,4 +5,4 @@ const orderSchema = mongoose.Schema({
     date : Date
 });
 
-module.exports = mongoose.model("order",orderSchema);
+module.exports = mongoose.model("order", orderSchema);
