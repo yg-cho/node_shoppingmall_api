@@ -36,7 +36,7 @@ router.get('/:productId', (req,res) => {
         .findById(id)
         .then(doc  => {
             if(doc){
-                res.json({
+                return res.json({
                     message : "Successful product detail get",
                     productinfo : doc
                 });
@@ -45,7 +45,6 @@ router.get('/:productId', (req,res) => {
                     message : "no product Id"
                 });
             }
-
         })
         .catch(err => {
             res.json({
@@ -104,10 +103,28 @@ router.put('/', (req, res) => {
 
 // product 정보 삭제하기
 
-router.delete('/', (req, res) => {
-    res.json({
-        message: 'product delete'
-    });
+router.delete('/:productId', (req, res) => {
+    const id = req.params.productId;
+
+    productModel
+        .findByIdAndDelete(id)
+        .then(() => {
+            res.json({
+                message : "Deleted product"
+            });
+        })
+        .catch(err => {
+            res.json({
+                error : err.message
+            });
+        });
+
+
+
+
+    // res.json({
+    //     message: 'product delete'
+    // });
 });
 
 
