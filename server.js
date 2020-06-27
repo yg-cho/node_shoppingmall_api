@@ -13,7 +13,7 @@ const orderRoute = require("./routes/orders");
 const db = "mongodb+srv://root:12345@cluster0-fe4rr.mongodb.net/shoppingmall?retryWrites=true&w=majority";
 
 // promise 절차적인 약속
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true } )
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true , useFindAndModify: true} )
     .then(() => console.log("MongoDB connected ..."))
     .catch(err => console.log(err.message));
 

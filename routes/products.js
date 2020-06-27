@@ -31,11 +31,6 @@ router.get('/', (req, res) => {
             });
         });
 
-
-
-    // res.json({
-    //     message: 'product total get'
-    // });
 });
 
 // product 상세데이터 불러오는 api
@@ -142,7 +137,6 @@ router.patch('/:productId', (req, res) => {
 
 
 // product 정보 삭제하기
-
 router.delete('/:productId', (req, res) => {
     const id = req.params.productId;
 
