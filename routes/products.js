@@ -83,20 +83,34 @@ router.post('/', (req, res) => {
             });
         });
 
-
-    //
-    // res.json({
-    //     message: 'product post',
-    //     productInfo: product
-    // });
 });
 
 // product 정보 수정하기
 
-router.put('/', (req, res) => {
-    res.json({
-        message: 'product put'
-    });
+router.patch('/:productId', (req, res) => {
+
+    // update할 대상선언
+    const id = req.params.productId;
+
+    // update될 내용
+    const updatedOps = {};
+    for(const ops of req.body) {
+        updatedOps[ops.propName] = ops.value;
+    }
+
+    productModel
+        .findByIdAndUpdate(id,{$set: updatedOps })
+        .then(() => {
+            res.json({
+                message : "updated product"
+            });
+        })
+        .catch(err => {
+            res.json({
+                error : err.message
+            });
+        });
+
 });
 
 
@@ -119,16 +133,17 @@ router.delete('/:productId', (req, res) => {
             });
         });
 
-
-
-
-    // res.json({
-    //     message: 'product delete'
-    // });
 });
 
 
 
+//product 전체 삭제
+router.delete("/",(req, res) => {
+    productModel
+        .delete()
+        .then()
+        .catch();
+});
 
 
 
