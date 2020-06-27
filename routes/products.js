@@ -8,11 +8,6 @@ router.get('/', (req, res) => {
     productModel
         .find()
         .then(docs => {
-            // res.json({
-            //     message : "product total get",
-            //     count : docs.length,
-            //     products : docs
-            // });
             const response = {
                 count: docs.length,
                 products: docs.map(doc => {
@@ -82,11 +77,6 @@ router.get('/:productId', (req,res) => {
 
 // product 정보 등록하기
 router.post('/', (req, res) => {
-
-    // const product = {
-    //     name : req.body.productName,
-    //     price : req.body.productPrice
-    // }
 
     const product = new productModel({
         name : req.body.productName,
