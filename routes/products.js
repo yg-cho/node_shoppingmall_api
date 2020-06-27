@@ -27,6 +27,36 @@ router.get('/', (req, res) => {
     // });
 });
 
+// product 상세데이터 불러오는 api
+
+router.get('/:productId', (req,res) => {
+    const id = req.params.productId;
+
+    productModel
+        .findById(id)
+        .then(doc  => {
+            if(doc){
+                res.json({
+                    message : "Successful product detail get",
+                    productinfo : doc
+                });
+            }else{
+                res.json({
+                    message : "no product Id"
+                });
+            }
+
+        })
+        .catch(err => {
+            res.json({
+                error : err.message
+            });
+        })
+
+});
+
+
+
 // product 정보 등록하기
 router.post('/', (req, res) => {
 
