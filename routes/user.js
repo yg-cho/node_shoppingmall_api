@@ -2,6 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const userModel = require('../models/user')
 
 //회원가입
@@ -62,7 +64,7 @@ router.post('/register', (req, res) => {
 //로그인
 router.post('/login', (req, res) => {
 
-    // email 유무체크, password 체킹
+    // email 유무체크 -> password 체킹 -> jsonwebtoken 반환
     userModel
         .findOne({ email: req.body.email })
         .then(user => {
@@ -80,7 +82,18 @@ router.post('/login', (req, res) => {
                         });
                     } else {
                         // 로그인성공시 token 반환
-
+                        const token = jwt.sign(
+                            {
+                            email: user.email,
+                            userId: user._id
+                            },
+                            "secret",
+                            { expiresIn: "1h" }
+                        );
+                        res.json({
+                            message: "Auth successful",
+                            tokenInfo: token
+                        });
                     }
                 })
 
