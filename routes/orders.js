@@ -1,165 +1,34 @@
 //1
 const express = require('express');
 const router = express.Router();
-const orderModel = require('../models/orders');
+
 
 const checkAuth = require('../config/check-auth');
 
+const {
+    orders_get_all,
+    orders_get_order,
+    orders_create_order,
+    orders_update_order,
+    orders_delete_order
+} = require('../controllers/orders');
 
 
 // order 전체정보 불러오기
-router.get('/', checkAuth, (req, res) => {
-    orderModel
-        .find()
-        .populate("product", "name price")
-        .then(docs => {
-            const response = {
-                count: docs.length,
-                orders: docs.map(doc => {
-                    return{
-                        id: doc._id,
-                        product: doc.product,
-                        quntity: doc.quntity,
-                        request: {
-                            type: "GET",
-                            url: "http://localhost:5000/order/"+doc._id
-                        }
-                    }
-                })
-            }
-            res.json(response);
-        })
-        .catch(err => {
-            res.json({
-                error: err.message
-            });
-        });
-});
+router.get('/', checkAuth, orders_get_all);
 
 //order 상세데이터 불러오는 api
 
-router.get('/:orderId', checkAuth, (req,res) =>{
-   const id = req.params.orderId;
-
-   orderModel
-       .findById(id)
-       .populate("product","name price")
-       .then(doc => {
-           if(doc){
-               return res.json({
-                   message: "Successful order detail get",
-                   orderInfo: {
-                       id: doc._id,
-                       product: doc.product,
-                       quntity: doc.quntity,
-                       createdAt: doc.createdAt,
-                       updatedAt: doc.updatedAt,
-                       request: {
-                           type: "GET",
-                           url: "http://localhost:5000/order"
-                       }
-                   }
-               });
-           }else{
-               res.json({
-                   message: "no order Id"
-               });
-           }
-       })
-       .catch(err => {
-           res.json({
-               error: err.message
-           });
-       });
-});
-
+router.get('/:orderId', checkAuth, orders_get_order);
 
 // order 정보 등록하기
-router.post('/', checkAuth, (req, res) => {
-
-    const order = new orderModel({
-        product: req.body.productId,
-        quantity: req.body.qty
-    });
-
-    order
-        .save()
-        //populate 하는방법 찾아보기
-        .then(result => {
-            res.json({
-                message: "Successful order stored",
-                orderInfo : {
-                    id: order._id,
-                    product: order.product,
-                    quntity: order.quntity,
-                    createdAt: order.createdAt,
-                    request: {
-                        type: "GET",
-                        url: "http://localhost:5000/order/"+order._id
-                    }
-                }
-
-            });
-        })
-        .catch(err =>{
-            res.json({
-                error : err.message
-            });
-        });
-
-});
+router.post('/', checkAuth, orders_create_order);
 
 // order 정보 수정하기
-router.patch('/:orderId', checkAuth, (req,res) => {
-
-    //update할 대상
-    const id = req.params.orderId;
-
-    //update 내용
-    const updatedOps = {};
-    for(const ops of req.body) {
-        updatedOps[ops.propName] = ops.value;
-    }
-
-    orderModel
-        .findByIdAndUpdate(id,{ $set: updatedOps })
-        .then(() => {
-            res.json({
-                message: "updated order",
-                request: {
-                    type: "GET",
-                    url: "http://localhost:5000/order/"+id
-                }
-            });
-        })
-        .catch(err => {
-            res.json({
-                error : err.message
-            });
-        })
-});
+router.patch('/:orderId', checkAuth, orders_update_order);
 
 // order 정보 삭제하기
-router.delete('/:orderId', checkAuth, (req,res) => {
-    const id = req.params.orderId;
-
-    orderModel.
-        findByIdAndDelete(id)
-        .then(() => {
-            res.json({
-                message: "Deleted order",
-                request: {
-                    type: "GET",
-                    url: "http://localhost:5000/order"
-                }
-            })
-        })
-        .catch(err => {
-            res.json({
-                error : err.message
-            });
-        })
-});
+router.delete('/:orderId', checkAuth, orders_delete_order);
 
 //2
 module.exports = router;
