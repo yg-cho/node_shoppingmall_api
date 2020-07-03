@@ -13,6 +13,7 @@ const {
     orders_delete_order
 } = require('../controllers/orders');
 
+//const  orderController = require('../controllers/orders')
 
 // order 전체정보 불러오기
 router.get('/', checkAuth, orders_get_all);

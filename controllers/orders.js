@@ -65,9 +65,10 @@ exports.orders_get_order = (req,res) =>{
 
 exports.orders_create_order = (req, res) => {
 
+    const { product, quantity } = req.body;
     const order = new orderModel({
-        product: req.body.productId,
-        quantity: req.body.qty
+        //key == value
+        product, quantity
     });
 
     order

@@ -36,9 +36,11 @@ exports.products_get_all = (req, res) => {
 
 exports.products_create_product = (req, res) => {
 
+    const { name, price } = req.body;
+
     const product = new productModel({
-        name : req.body.productName,
-        price : req.body.productPrice
+        // key = value 일 경우 생략가능
+        name, price
     });
 
     product
