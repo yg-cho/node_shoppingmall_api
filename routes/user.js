@@ -1,31 +1,44 @@
 //1
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const userModel = require('../models/user')
 
 //회원가입
 router.post('/register', (req, res) => {
-   // res.json({
-   //     message: "회원가입 성공"
-   // });
-    const user = new userModel({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
-    });
-    user
-        .save()
-        .then(user => {
-            res.json({
-                message: "Registered OK",
-                userInfo: user
+
+    // password 암호화
+    bcrypt.hash(req.body.password, 10, (err, hash) => {
+        if(err) {
+            return res.status(500).json({
+                error: err
             });
-        })
-        .catch(err => {
-            res.json({
-                error: err.message
+        } else {
+
+            // 암호화 성공시 database에 저장
+            const user = new userModel({
+                username: req.body.username,
+                email: req.body.email,
+                password: hash
             });
-        });
+            user
+                .save()
+                .then(user => {
+                    res.json({
+                        message: "Registered OK",
+                        userInfo: user
+                    });
+                })
+                .catch(err => {
+                    res.json({
+                        error: err.message
+                    });
+                });
+        }
+    })
+
+
+
 });
 
 //로그인
