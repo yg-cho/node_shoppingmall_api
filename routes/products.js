@@ -48,6 +48,8 @@ router.get('/:productId', (req,res) => {
                         id: doc._id,
                         name: doc.name,
                         price: doc.price,
+                        createdAt: doc.createdAt,
+                        updatedAt: doc.updatedAt,
                         request : {
                             type: "GET",
                             url: "http://localhost:5000/product"
@@ -87,6 +89,7 @@ router.post('/', (req, res) => {
                     id: result._id,
                     name: result.name,
                     price: result.price,
+                    createdAt: result.createdAt,
                     request : {
                         type: "GET",
                         url: "http://localhost:5000/product/"+result._id

@@ -51,6 +51,8 @@ router.get('/:orderId', (req,res) =>{
                        id: doc._id,
                        product: doc.product,
                        quntity: doc.quntity,
+                       createdAt: doc.createdAt,
+                       updatedAt: doc.updatedAt,
                        request: {
                            type: "GET",
                            url: "http://localhost:5000/order"
@@ -89,6 +91,7 @@ router.post('/', (req, res) => {
                     id: order._id,
                     product: order.product,
                     quntity: order.quntity,
+                    createdAt: order.createdAt,
                     request: {
                         type: "GET",
                         url: "http://localhost:5000/order/"+order._id

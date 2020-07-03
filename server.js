@@ -10,6 +10,7 @@ dotEnv.config();
 
 const productRoute = require("./routes/products");
 const orderRoute = require("./routes/orders");
+const userRoute = require("./routes/user");
 
 //database 연결
 require("./config/database");
@@ -23,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // router
 app.use("/product", productRoute);
 app.use("/order", orderRoute);
-// app.use("/", (req, res))
+app.use("/user", userRoute);
 
 
 const PORT = process.env.PORT || 7000;
