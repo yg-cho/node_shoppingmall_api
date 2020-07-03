@@ -1,9 +1,13 @@
 // 1
 const express = require('express');
 const router = express.Router();
-const productModel = require('../models/products')
+
+const productModel = require('../models/products');
+const checkAuth = require('../config/check-auth');
+
 
 // product 정보 불러오기
+// 누구나 접근가능
 router.get('/', (req, res) => {
     productModel
         .find()
@@ -34,8 +38,8 @@ router.get('/', (req, res) => {
 });
 
 // product 상세데이터 불러오는 api
-
-router.get('/:productId', (req,res) => {
+// login한 사용자만 사용가능
+router.get('/:productId', checkAuth, (req,res) => {
     const id = req.params.productId;
 
     productModel
@@ -73,7 +77,8 @@ router.get('/:productId', (req,res) => {
 
 
 // product 정보 등록하기
-router.post('/', (req, res) => {
+// login한 사용자만 사용가능
+router.post('/', checkAuth, (req, res) => {
 
     const product = new productModel({
         name : req.body.productName,
@@ -107,7 +112,7 @@ router.post('/', (req, res) => {
 
 // product 정보 수정하기
 
-router.patch('/:productId', (req, res) => {
+router.patch('/:productId', checkAuth, (req, res) => {
 
     // update할 대상선언
     const id = req.params.productId;
@@ -140,7 +145,7 @@ router.patch('/:productId', (req, res) => {
 
 
 // product 정보 삭제하기
-router.delete('/:productId', (req, res) => {
+router.delete('/:productId', checkAuth, (req, res) => {
     const id = req.params.productId;
 
     productModel

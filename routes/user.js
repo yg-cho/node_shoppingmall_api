@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const userModel = require('../models/user')
+const checkAuth = require('../config/check-auth');
 
 //회원가입
 router.post('/register', (req, res) => {
@@ -87,12 +88,12 @@ router.post('/login', (req, res) => {
                             email: user.email,
                             userId: user._id
                             },
-                            "secret",
+                            process.env.SECRET_KEY,
                             { expiresIn: "1h" }
                         );
                         res.json({
                             message: "Auth successful",
-                            tokenInfo: token
+                            tokenInfo: "bearer " + token
                         });
                     }
                 })
@@ -112,7 +113,7 @@ router.post('/login', (req, res) => {
 });
 
 //현재 유저정보
-router.get('/:userId', (req, res) => {
+router.get('/', checkAuth, (req, res) => {
     res.json({
         message: "현재 유저정보"
     });

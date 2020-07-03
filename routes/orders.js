@@ -3,11 +3,12 @@ const express = require('express');
 const router = express.Router();
 const orderModel = require('../models/orders');
 
+const checkAuth = require('../config/check-auth');
 
 
 
 // order 전체정보 불러오기
-router.get('/', (req, res) => {
+router.get('/', checkAuth, (req, res) => {
     orderModel
         .find()
         .populate("product", "name price")
@@ -37,7 +38,7 @@ router.get('/', (req, res) => {
 
 //order 상세데이터 불러오는 api
 
-router.get('/:orderId', (req,res) =>{
+router.get('/:orderId', checkAuth, (req,res) =>{
    const id = req.params.orderId;
 
    orderModel
@@ -74,7 +75,7 @@ router.get('/:orderId', (req,res) =>{
 
 
 // order 정보 등록하기
-router.post('/', (req, res) => {
+router.post('/', checkAuth, (req, res) => {
 
     const order = new orderModel({
         product: req.body.productId,
@@ -109,7 +110,7 @@ router.post('/', (req, res) => {
 });
 
 // order 정보 수정하기
-router.patch('/:orderId',(req,res) => {
+router.patch('/:orderId', checkAuth, (req,res) => {
 
     //update할 대상
     const id = req.params.orderId;
@@ -139,7 +140,7 @@ router.patch('/:orderId',(req,res) => {
 });
 
 // order 정보 삭제하기
-router.delete('/:orderId',(req,res) => {
+router.delete('/:orderId', checkAuth, (req,res) => {
     const id = req.params.orderId;
 
     orderModel.
