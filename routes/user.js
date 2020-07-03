@@ -61,9 +61,41 @@ router.post('/register', (req, res) => {
 
 //로그인
 router.post('/login', (req, res) => {
-    res.json({
-        message: "로그인 성공"
-    });
+
+    // email 유무체크, password 체킹
+    userModel
+        .findOne({ email: req.body.email })
+        .then(user => {
+            if(!user){
+                return res.json({
+                    message : "email not found"
+                });
+            } else {
+                // password 체킹
+                //console.log(user);
+                bcrypt.compare(req.body.password, user.password, (err, result) => {
+                    if(err || result === false)  {
+                        return res.json({
+                            message: "password incorrect"
+                        });
+                    } else {
+                        // 로그인성공시 token 반환
+
+                    }
+                })
+
+            }
+        })
+        .catch(err => {
+            res.json({
+                error: err.message
+            });
+        });
+
+
+    // res.json({
+    //     message: "로그인 성공"
+    // });
 });
 
 //현재 유저정보
