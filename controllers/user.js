@@ -37,7 +37,6 @@ exports.user_register = async (req, res) => {
 };
 
 exports.user_login = async (req, res) => {
-
     try {
         const { email, password } = req.body;
 
@@ -90,13 +89,36 @@ exports.user_login = async (req, res) => {
         // 응답 본문에 메시지와 함께 Access Token 정보 추가
         res.status(200).json({
             message: "Auth successful",
-            accessToken: "Bearer " + accessToken
+            accessToken: "Bearer " + accessToken,
+            user: email
         });
 
     } catch (err) {
         res.status(500).json({
             error: err.message
         });
+    }
+};
+
+
+exports.user_change_password =  async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+
+        // 기존 비밀번호 확인
+        const validPassword = await req.user.comparePassword(oldPassword);
+        if (!validPassword) return res.status(400).send('Invalid current password.');
+
+        // 새 비밀번호 유효성 검사 (예: 최소 길이)
+        if (newPassword.length < 6) return res.status(400).send('Password must be at least 6 characters long.');
+
+        // 새 비밀번호 암호화 및 저장
+        req.user.password = newPassword;
+        await req.user.save();
+
+        res.send('Password changed successfully.');
+    } catch (err) {
+        res.status(500).send('Server error.');
     }
 };
 
@@ -107,7 +129,6 @@ exports.user_get_current = (req, res) => {
 };
 
 exports.token_refresh = (req, res) => {
-    console.log(req.header.cookies);
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
         return res.status(403).json({ message: 'Refresh Token not provided' });
@@ -119,9 +140,9 @@ exports.token_refresh = (req, res) => {
         }
 
         const newAccessToken = jwt.sign(
-            { email: user.email, userId: user.userId },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '15m' }
+          { email: user.email, userId: user.userId },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: '15m' }
         );
 
         res.header('Authorization', 'Bearer ' + newAccessToken);
